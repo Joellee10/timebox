@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, ArrowUp, Plus, X, Check, ChevronLeft, ChevronRight, LogOut, Cloud, CloudOff, Loader } from 'lucide-react';
+import { ArrowUp, Plus, X, LogOut, Cloud, CloudOff, Loader } from 'lucide-react';
 import { useSupabaseSync } from './hooks/useSupabaseSync';
 
 const TimeboxTool = ({ userCode, onSignOut }) => {
@@ -382,37 +382,37 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
   return (
     <div className="w-full max-w-6xl mx-auto p-3 sm:p-6 bg-gray-50 min-h-screen font-sans">
       {/* Header */}
-      <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <div className="min-w-0 flex-1">
+      <div className="mb-4 sm:mb-6 bg-white rounded-lg shadow-sm p-3 sm:p-4">
+        {/* 제목 + 문구 */}
+        <div className="mb-2">
+          <input
+            value={profile.title}
+            onChange={(e) => updateProfile({ ...profile, title: e.target.value })}
+            placeholder="나의 Timebox"
+            className="text-lg sm:text-2xl font-bold text-gray-800 bg-transparent border-none focus:outline-none w-full"
+          />
+          <input
+            value={profile.subtitle}
+            onChange={(e) => updateProfile({ ...profile, subtitle: e.target.value })}
+            placeholder="한 줄 문구를 입력하세요"
+            className="text-xs sm:text-sm text-gray-500 italic mt-1 bg-transparent border-none focus:outline-none w-full"
+          />
+        </div>
+
+        {/* 날짜 + 버튼 */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <input
-              value={profile.title}
-              onChange={(e) => updateProfile({ ...profile, title: e.target.value })}
-              placeholder="나의 Timebox"
-              className="text-2xl font-bold text-gray-800 bg-transparent border-none focus:outline-none w-full"
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
-            <input
-              value={profile.subtitle}
-              onChange={(e) => updateProfile({ ...profile, subtitle: e.target.value })}
-              placeholder="한 줄 문구를 입력하세요"
-              className="text-sm text-gray-500 italic mt-1 bg-transparent border-none focus:outline-none w-full"
-            />
+            <span className="text-xs sm:text-sm text-gray-500 truncate hidden sm:block">{formatDate(selectedDate)}</span>
           </div>
 
-          {/* 달력 + 버튼 */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-blue-600 hidden sm:block" />
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="px-2 sm:px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              />
-            </div>
-
-            {/* 동기화 상태 */}
-            <div className="flex items-center gap-1 text-sm" title={lastSyncError || ''}>
+          <div className="flex items-center gap-1">
+            <div className="flex items-center" title={lastSyncError || ''}>
               {isSaving ? (
                 <Loader className="w-4 h-4 text-blue-500 animate-spin" />
               ) : lastSyncError ? (
@@ -421,18 +421,15 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
                 <Cloud className="w-4 h-4 text-green-500" />
               )}
             </div>
-
             <button
               onClick={onSignOut}
-              className="p-2 text-gray-500 hover:text-gray-700"
+              className="p-1.5 text-gray-500 hover:text-gray-700"
               title="나가기"
             >
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
-
-        <p className="text-gray-600 mt-2">{formatDate(selectedDate)}</p>
       </div>
 
       {/* Main Layout */}
