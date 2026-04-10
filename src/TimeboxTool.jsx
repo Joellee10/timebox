@@ -309,24 +309,23 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
 
   const currentData = getCurrentData();
 
-  const TimeBlockSection = ({ title, timeRange, blockKey, color, bgColor }) => (
-    <div className={`border-l-4 ${color} pl-4`}>
+  const TimeBlockSection = ({ title, timeRange, blockKey }) => (
+    <div className="border-l-4 border-gray-300 pl-4">
       <div className="flex items-center gap-2 mb-3">
-        <div className={`w-4 h-4 ${bgColor} rounded-full`}></div>
-        <h3 className={`text-lg font-semibold ${color.replace('border-', 'text-')}`}>
-          {title} ({timeRange})
+        <h3 className="text-lg font-semibold text-gray-700">
+          {title} <span className="text-sm font-normal text-gray-400">({timeRange})</span>
         </h3>
-        <span className="text-sm text-gray-500">
-          ({currentData.timeBlocks[blockKey].length}/3)
+        <span className="text-sm text-gray-400">
+          {currentData.timeBlocks[blockKey].length}/3
         </span>
       </div>
       <div
-        className={`space-y-2 mb-3 min-h-[120px] sm:min-h-[200px] p-3 rounded-lg border-2 border-dashed border-gray-300 transition-colors duration-150 ${
+        className={`space-y-2 mb-3 min-h-[120px] sm:min-h-[200px] p-3 rounded-lg border-2 border-dashed border-gray-200 transition-colors duration-150 ${
           draggedItem && (
             draggedItem.type === 'priority' ||
             (draggedItem.type === 'timeblock' && draggedItem.timeBlock !== blockKey)
           ) && currentData.timeBlocks[blockKey].length < 3
-            ? 'border-blue-400 bg-blue-50'
+            ? 'border-gray-400 bg-gray-50'
             : ''
         }`}
         onDragOver={handleTimeBlockDragOver}
@@ -342,7 +341,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
             draggable
             onDragStart={() => handleTimeBlockDragStart(blockKey, index)}
             onDragEnd={handleDragEnd}
-            className={`flex items-center gap-2 p-3 ${bgColor.replace('bg-', 'bg-').replace('-500', '-50')} rounded-lg border cursor-move hover:shadow-md transition-all ${
+            className={`flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-move hover:shadow-sm transition-all ${
               draggedItem?.type === 'timeblock' && draggedItem.timeBlock === blockKey && draggedItem.index === index
                 ? 'opacity-50'
                 : ''
@@ -352,15 +351,14 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
               type="checkbox"
               checked={item.done || false}
               onChange={() => toggleTaskDone(blockKey, index)}
-              className="w-5 h-5 text-green-600 bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-              style={{ accentColor: item.done ? '#22c55e' : '#d1d5db' }}
+              className="w-5 h-5 bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-gray-400 transition-colors accent-gray-600"
             />
-            <span className={`flex-1 text-sm font-semibold ${(item.done || false) ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+            <span className={`flex-1 text-sm font-semibold ${(item.done || false) ? 'line-through text-gray-400' : 'text-gray-800'}`}>
               {item.text || item}
             </span>
             <button
               onClick={() => removeFromTimeBlock(blockKey, index)}
-              className="text-red-500 hover:text-red-700"
+              className="text-gray-400 hover:text-gray-600"
             >
               <X className="w-4 h-4" />
             </button>
@@ -451,14 +449,58 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
         </div>
       </div>
 
-      {/* Main Layout */}
+      {/* Main Layout: Brain Dump → Priorities → Time Blocks */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Left Column */}
         <div className="lg:col-span-5 space-y-4 sm:space-y-6">
-          {/* Top 3 Priorities */}
+          {/* Brain Dump (1단계: 아이디어 수집) */}
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 min-h-[250px] lg:h-[380px]">
+            <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-2">
+              <h2 className="text-xl font-semibold text-gray-800">Brain Dump</h2>
+              <button
+                onClick={addBrainDumpItem}
+                className="p-1 text-gray-500 hover:text-gray-700"
+              >
+                <Plus className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-2 max-h-[240px] overflow-y-auto">
+              {currentData.brainDump.map((item, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    value={item}
+                    onChange={(e) => updateBrainDumpItem(index, e.target.value)}
+                    onKeyDown={(e) => handleBrainDumpKeyDown(index, e)}
+                    data-braindump-index={index}
+                    placeholder="태스크를 적어보세요..."
+                    className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                  />
+                  <button
+                    onClick={() => moveToPriority(index)}
+                    disabled={!item.trim() || currentData.priorities.length >= 3}
+                    className="p-2 text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed"
+                    title="우선순위로 이동"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => removeBrainDumpItem(index)}
+                    className="p-2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <p className="text-xs text-gray-400">Cmd+P: 우선순위로 이동 / Enter: 다음 줄</p>
+            </div>
+          </div>
+
+          {/* Top 3 Priorities (2단계: 우선순위 선정 → Time Block으로 드래그) */}
           <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 min-h-[200px] lg:h-[360px] overflow-y-auto">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
-              🎯 Top 3 Priorities ({currentData.priorities.length}/3)
+              Top 3 Priorities <span className="text-sm font-normal text-gray-400">{currentData.priorities.length}/3</span>
             </h2>
             <div className="space-y-3">
               {currentData.priorities.map((priority, index) => (
@@ -469,111 +511,45 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
                   onDragOver={handlePriorityDragOver}
                   onDrop={() => handlePriorityDrop(index)}
                   onDragEnd={handleDragEnd}
-                  className={`flex items-start gap-3 p-3 bg-blue-50 rounded-lg border cursor-move hover:shadow-md transition-all ${
+                  className={`flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-move hover:shadow-sm transition-all ${
                     draggedItem?.type === 'priority' && draggedItem.index === index ? 'opacity-50 scale-95' : ''
                   }`}
                 >
-                  <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0">
+                  <span className="w-7 h-7 bg-gray-700 text-white rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0">
                     {index + 1}
                   </span>
-                  <div className="flex-1">
-                    <input
-                      value={priority}
-                      onChange={(e) => updatePriority(index, e.target.value)}
-                      className="w-full p-2 border-none bg-transparent focus:outline-none resize-none"
-                      placeholder={`Priority ${index + 1}...`}
-                    />
-                    <div className="flex gap-2 mt-2">
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                        드래그해서 Time Block으로 이동
-                      </span>
-                      <button
-                        onClick={() => removePriority(index)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Brain Dump */}
-          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 min-h-[300px] lg:h-[400px]">
-            <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-2">
-              <h2 className="text-xl font-semibold text-gray-800">🧠 Brain Dump</h2>
-              <button
-                onClick={addBrainDumpItem}
-                className="p-1 text-blue-600 hover:text-blue-800"
-              >
-                <Plus className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="space-y-2 max-h-[270px] overflow-y-auto">
-              {currentData.brainDump.map((item, index) => (
-                <div key={index} className="flex items-center gap-2">
                   <input
-                    value={item}
-                    onChange={(e) => updateBrainDumpItem(index, e.target.value)}
-                    onKeyDown={(e) => handleBrainDumpKeyDown(index, e)}
-                    data-braindump-index={index}
-                    placeholder="태스크를 적어보세요..."
-                    className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={priority}
+                    onChange={(e) => updatePriority(index, e.target.value)}
+                    className="flex-1 p-1 border-none bg-transparent focus:outline-none text-sm"
+                    placeholder={`Priority ${index + 1}...`}
                   />
                   <button
-                    onClick={() => moveToPriority(index)}
-                    disabled={!item.trim() || currentData.priorities.length >= 3}
-                    className="p-2 text-green-600 hover:text-green-800 disabled:text-gray-400 disabled:cursor-not-allowed"
-                    title="우선순위로 이동"
-                  >
-                    <ArrowUp className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => removeBrainDumpItem(index)}
-                    className="p-2 text-red-500 hover:text-red-700"
+                    onClick={() => removePriority(index)}
+                    className="text-gray-400 hover:text-gray-600"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
               ))}
-            </div>
-            <div className="mt-3 pt-3 border-t border-gray-100">
-              <p className="text-xs text-gray-400">*⌘P로 우선순위 설정</p>
+              {currentData.priorities.length === 0 && (
+                <p className="text-sm text-gray-400 text-center py-4">Brain Dump에서 추가하세요</p>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Right Column - Timebox */}
+        {/* Right Column - Time Blocks (3단계: 시간에 배치) */}
         <div className="lg:col-span-7">
           <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold text-gray-800 mb-6 border-b border-gray-200 pb-2">
-              ⏰ Time Blocks
+              Time Blocks
             </h2>
 
             <div className="space-y-6">
-              <TimeBlockSection
-                title="오전"
-                timeRange="10:00 - 13:00"
-                blockKey="morning"
-                color="border-green-500"
-                bgColor="bg-green-500"
-              />
-              <TimeBlockSection
-                title="오후 1"
-                timeRange="14:00 - 16:30"
-                blockKey="afternoon1"
-                color="border-orange-500"
-                bgColor="bg-orange-500"
-              />
-              <TimeBlockSection
-                title="오후 2"
-                timeRange="16:30 - 19:00"
-                blockKey="afternoon2"
-                color="border-purple-500"
-                bgColor="bg-purple-500"
-              />
+              <TimeBlockSection title="오전" timeRange="10:00 - 13:00" blockKey="morning" />
+              <TimeBlockSection title="오후 1" timeRange="14:00 - 16:30" blockKey="afternoon1" />
+              <TimeBlockSection title="오후 2" timeRange="16:30 - 19:00" blockKey="afternoon2" />
             </div>
           </div>
         </div>
