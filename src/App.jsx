@@ -25,7 +25,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-start bg-gray-100">
+    <div className="min-h-screen flex justify-center items-start bg-[#fafafa]">
       <div className="w-full max-w-6xl">
         <TimeboxTool userCode={userCode} onSignOut={handleSignOut} />
       </div>
