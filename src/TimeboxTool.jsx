@@ -355,7 +355,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
         </span>
       </div>
       <div
-        className={`space-y-2 mb-3 min-h-[200px] p-3 rounded-lg border-2 border-dashed border-gray-300 transition-colors duration-150 ${
+        className={`space-y-2 mb-3 min-h-[120px] sm:min-h-[200px] p-3 rounded-lg border-2 border-dashed border-gray-300 transition-colors duration-150 ${
           draggedItem && (
             draggedItem.type === 'priority' ||
             (draggedItem.type === 'timeblock' && draggedItem.timeBlock !== blockKey)
@@ -421,7 +421,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen font-sans">
+    <div className="w-full max-w-6xl mx-auto p-3 sm:p-6 bg-gray-50 min-h-screen font-sans">
       {/* JSON 불러오기를 위한 숨김 파일 입력 */}
       <input
         type="file"
@@ -439,57 +439,59 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
             <p className="text-sm text-gray-500 italic mt-1">🚀 Taking "Karrot JP" to the moon... 🌕</p>
           </div>
 
-          {/* 달력 + 내보내기/불러오기/초기화 버튼 */}
-          <div className="flex items-center gap-3">
+          {/* 달력 + 버튼 */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-blue-600" />
+              <Calendar className="w-5 h-5 text-blue-600 hidden sm:block" />
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-2 sm:px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
-            <button
-              onClick={handleExport}
-              className="px-3 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
-            >
-              내보내기
-            </button>
+            <div className="flex items-center gap-1 sm:gap-2">
+              <button
+                onClick={handleExport}
+                className="px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
+              >
+                내보내기
+              </button>
 
-            <button
-              onClick={handleImportClick}
-              className="px-3 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
-            >
-              불러오기
-            </button>
+              <button
+                onClick={handleImportClick}
+                className="px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
+              >
+                불러오기
+              </button>
 
-            <button
-              onClick={handleReset}
-              className="px-3 py-2 text-sm rounded-lg border border-red-300 text-red-600 hover:bg-red-50"
-            >
-              초기화
-            </button>
+              <button
+                onClick={handleReset}
+                className="px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-lg border border-red-300 text-red-600 hover:bg-red-50"
+              >
+                초기화
+              </button>
 
-            {/* 동기화 상태 */}
-            <div className="flex items-center gap-1 text-sm" title={lastSyncError || ''}>
-              {isSaving ? (
-                <Loader className="w-4 h-4 text-blue-500 animate-spin" />
-              ) : lastSyncError ? (
-                <CloudOff className="w-4 h-4 text-red-500" />
-              ) : (
-                <Cloud className="w-4 h-4 text-green-500" />
-              )}
+              {/* 동기화 상태 */}
+              <div className="flex items-center gap-1 text-sm" title={lastSyncError || ''}>
+                {isSaving ? (
+                  <Loader className="w-4 h-4 text-blue-500 animate-spin" />
+                ) : lastSyncError ? (
+                  <CloudOff className="w-4 h-4 text-red-500" />
+                ) : (
+                  <Cloud className="w-4 h-4 text-green-500" />
+                )}
+              </div>
+
+              <button
+                onClick={onSignOut}
+                className="p-2 text-gray-500 hover:text-gray-700"
+                title="나가기"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
             </div>
-
-            <button
-              onClick={onSignOut}
-              className="p-2 text-gray-500 hover:text-gray-700"
-              title="나가기"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
           </div>
         </div>
 
@@ -497,11 +499,11 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
       </div>
 
       {/* Main Layout */}
-      <div className="grid grid-cols-12 gap-6 h-[800px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Left Column */}
-        <div className="col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-4 sm:space-y-6">
           {/* Top 3 Priorities */}
-          <div className="bg-white rounded-lg shadow-sm p-6 h-[360px] overflow-y-auto">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 min-h-[200px] lg:h-[360px] overflow-y-auto">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
               🎯 Top 3 Priorities ({currentData.priorities.length}/3)
             </h2>
@@ -546,7 +548,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
           </div>
 
           {/* Brain Dump */}
-          <div className="bg-white rounded-lg shadow-sm p-6 h-[400px]">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 min-h-[300px] lg:h-[400px]">
             <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-2">
               <h2 className="text-xl font-semibold text-gray-800">🧠 Brain Dump</h2>
               <button
@@ -556,7 +558,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
                 <Plus className="w-5 h-5" />
               </button>
             </div>
-            <div className="space-y-2 h-[270px] overflow-y-auto">
+            <div className="space-y-2 max-h-[270px] overflow-y-auto">
               {currentData.brainDump.map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <input
@@ -591,8 +593,8 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
         </div>
 
         {/* Right Column - Timebox */}
-        <div className="col-span-7">
-          <div className="bg-white rounded-lg shadow-sm p-6 h-full overflow-y-auto">
+        <div className="lg:col-span-7">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold text-gray-800 mb-6 border-b border-gray-200 pb-2">
               ⏰ Time Blocks
             </h2>
@@ -626,7 +628,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
 
       {/* History Section */}
       {Object.keys(data).length > 0 && (
-        <div className="mt-6 bg-white rounded-lg shadow-sm p-6">
+        <div className="mt-4 sm:mt-6 bg-white rounded-lg shadow-sm p-4 sm:p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">📚 History</h3>
           <div className="flex flex-wrap gap-2 mb-4">
             {Object.keys(data)
