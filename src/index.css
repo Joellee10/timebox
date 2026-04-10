@@ -1,0 +1,18 @@
+/* src/index.css */
+/* Tailwind v4 스타일 로딩 */
+@import "tailwindcss";
+
+/* 화면 전체 높이 확보 */
+html, body, #root {
+  height: 100%;
+}
+
+/* Vite 기본 스타일 제거 + 우리가 레이아웃을 제어할 수 있게 reset */
+body {
+  margin: 0;
+  display: block;        /* ← Vite의 display:flex 제거 */
+  background: #f3f4f6;   /* Tailwind bg-gray-100 비슷한 톤 */
+  color: #111827;        /* Tailwind text-gray-900 비슷한 톤 */
+}
+
+/* 필요 없는 Vite 템플릿 스타일(링크/버튼/다크모드 등) 전부 삭제 */
