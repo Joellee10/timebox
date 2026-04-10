@@ -15,6 +15,7 @@ export default function CodeEntryScreen({ onSubmit }) {
     setError('');
 
     try {
+      if (!supabase) { setError('서버 설정 오류'); return; }
       const { data, error: fetchError } = await supabase
         .from('user_codes')
         .select('code')

@@ -22,6 +22,7 @@ export default function AdminPanel() {
 
   const fetchCodes = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); setError('서버 설정 오류'); return; }
     const { data, error } = await supabase
       .from('user_codes')
       .select('*')
@@ -39,6 +40,8 @@ export default function AdminPanel() {
 
     setCreating(true);
     setError('');
+
+    if (!supabase) { setCreating(false); setError('서버 설정 오류'); return; }
 
     const code = customCode.trim() || generateCode();
 
