@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowUp, Plus, X, LogOut, Cloud, CloudOff, Loader } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowUp, Plus, X, LogOut, Cloud, CloudOff, Loader, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSupabaseSync } from './hooks/useSupabaseSync';
 
 const TimeboxTool = ({ userCode, onSignOut }) => {
@@ -7,6 +7,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
   const [data, setData] = useState({});
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [draggedItem, setDraggedItem] = useState(null);
+  const dateInputRef = useRef(null);
 
   // ====== Supabase 동기화 ======
   const { isLoading, isSaving, lastSyncError, profile, updateProfile } = useSupabaseSync({
@@ -300,6 +301,12 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
     });
   };
 
+  const navigateDate = (offset) => {
+    const d = new Date(selectedDate);
+    d.setDate(d.getDate() + offset);
+    setSelectedDate(d.toISOString().split('T')[0]);
+  };
+
   const currentData = getCurrentData();
 
   const TimeBlockSection = ({ title, timeRange, blockKey, color, bgColor }) => (
@@ -401,17 +408,29 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
 
         {/* 날짜 + 버튼 */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-1 min-w-0">
+            <button onClick={() => navigateDate(-1)} className="p-1 text-gray-400 hover:text-gray-600 flex-shrink-0">
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => dateInputRef.current?.showPicker()}
+              className="text-sm sm:text-base text-gray-700 font-medium hover:text-blue-600 transition-colors truncate"
+            >
+              {formatDate(selectedDate)}
+            </button>
             <input
+              ref={dateInputRef}
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="absolute opacity-0 w-0 h-0"
             />
-            <span className="text-xs sm:text-sm text-gray-500 truncate hidden sm:block">{formatDate(selectedDate)}</span>
+            <button onClick={() => navigateDate(1)} className="p-1 text-gray-400 hover:text-gray-600 flex-shrink-0">
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 flex-shrink-0">
             <div className="flex items-center" title={lastSyncError || ''}>
               {isSaving ? (
                 <Loader className="w-4 h-4 text-blue-500 animate-spin" />
