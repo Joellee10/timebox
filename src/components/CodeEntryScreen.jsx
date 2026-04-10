@@ -37,32 +37,33 @@ export default function CodeEntryScreen({ onSubmit }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fafafa]">
-      <div className="w-full max-w-xs">
-        <div className="text-center mb-8">
-          <h1 className="text-lg font-semibold text-gray-900">Timebox</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">Timebox</h1>
+          <p className="text-sm text-gray-500 mt-1">코드를 입력해서 시작하세요</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             value={code}
             onChange={(e) => { setCode(e.target.value); setError(''); }}
-            placeholder="Enter your code"
-            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-md text-sm text-gray-700 text-center tracking-widest focus:outline-none focus:ring-1 focus:ring-violet-400 focus:border-violet-400 placeholder-gray-300"
+            placeholder="사용자 코드 입력"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-widest"
             autoFocus
           />
 
           {error && (
-            <p className="text-red-400 text-xs text-center">{error}</p>
+            <p className="text-red-500 text-sm text-center">{error}</p>
           )}
 
           <button
             type="submit"
             disabled={loading || !code.trim()}
-            className="w-full py-2.5 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-gray-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
-            {loading ? '...' : 'Continue'}
+            {loading ? '확인 중...' : '입장'}
           </button>
         </form>
       </div>
