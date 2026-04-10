@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, ArrowUp, Plus, X, Check, ChevronLeft, ChevronRight, LogOut, Cloud, CloudOff, Loader } from 'lucide-react';
 import { useSupabaseSync } from './hooks/useSupabaseSync';
 
@@ -13,47 +13,6 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
     userCode, data, setData, selectedDate, setSelectedDate
   });
 
-  // ====== 내보내기/불러오기/초기화 ======
-  const fileInputRef = useRef(null);
-
-  const handleExport = () => {
-    const raw = JSON.stringify({ data, selectedDate });
-    const blob = new Blob([raw], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `timebox-${selectedDate}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleImportClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImportFile = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (parsed?.data) setData(parsed.data);
-        if (parsed?.selectedDate) setSelectedDate(parsed.selectedDate);
-      } catch {
-        alert('JSON 파일 형식이 올바르지 않습니다.');
-      } finally {
-        e.target.value = '';
-      }
-    };
-    reader.readAsText(file);
-  };
-
-  const handleReset = () => {
-    if (confirm('모든 데이터를 초기화할까요?')) {
-      setData({});
-    }
-  };
 
   // ====== 상태 접근 헬퍼 ======
   const getCurrentData = () => {
@@ -422,15 +381,6 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-3 sm:p-6 bg-gray-50 min-h-screen font-sans">
-      {/* JSON 불러오기를 위한 숨김 파일 입력 */}
-      <input
-        type="file"
-        accept="application/json"
-        className="hidden"
-        ref={fileInputRef}
-        onChange={handleImportFile}
-      />
-
       {/* Header */}
       <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
@@ -451,47 +401,24 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
               />
             </div>
 
-            <div className="flex items-center gap-1 sm:gap-2">
-              <button
-                onClick={handleExport}
-                className="px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
-              >
-                내보내기
-              </button>
-
-              <button
-                onClick={handleImportClick}
-                className="px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
-              >
-                불러오기
-              </button>
-
-              <button
-                onClick={handleReset}
-                className="px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-lg border border-red-300 text-red-600 hover:bg-red-50"
-              >
-                초기화
-              </button>
-
-              {/* 동기화 상태 */}
-              <div className="flex items-center gap-1 text-sm" title={lastSyncError || ''}>
-                {isSaving ? (
-                  <Loader className="w-4 h-4 text-blue-500 animate-spin" />
-                ) : lastSyncError ? (
-                  <CloudOff className="w-4 h-4 text-red-500" />
-                ) : (
-                  <Cloud className="w-4 h-4 text-green-500" />
-                )}
-              </div>
-
-              <button
-                onClick={onSignOut}
-                className="p-2 text-gray-500 hover:text-gray-700"
-                title="나가기"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
+            {/* 동기화 상태 */}
+            <div className="flex items-center gap-1 text-sm" title={lastSyncError || ''}>
+              {isSaving ? (
+                <Loader className="w-4 h-4 text-blue-500 animate-spin" />
+              ) : lastSyncError ? (
+                <CloudOff className="w-4 h-4 text-red-500" />
+              ) : (
+                <Cloud className="w-4 h-4 text-green-500" />
+              )}
             </div>
+
+            <button
+              onClick={onSignOut}
+              className="p-2 text-gray-500 hover:text-gray-700"
+              title="나가기"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
