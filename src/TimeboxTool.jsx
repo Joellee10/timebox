@@ -9,7 +9,7 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
   const [draggedItem, setDraggedItem] = useState(null);
 
   // ====== Supabase 동기화 ======
-  const { isLoading, isSaving, lastSyncError } = useSupabaseSync({
+  const { isLoading, isSaving, lastSyncError, profile, updateProfile } = useSupabaseSync({
     userCode, data, setData, selectedDate, setSelectedDate
   });
 
@@ -384,9 +384,19 @@ const TimeboxTool = ({ userCode, onSignOut }) => {
       {/* Header */}
       <div className="mb-6 bg-white rounded-lg shadow-sm p-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Jo'elon Musk's Timebox</h1>
-            <p className="text-sm text-gray-500 italic mt-1">🚀 Taking "Karrot JP" to the moon... 🌕</p>
+          <div className="min-w-0 flex-1">
+            <input
+              value={profile.title}
+              onChange={(e) => updateProfile({ ...profile, title: e.target.value })}
+              placeholder="나의 Timebox"
+              className="text-2xl font-bold text-gray-800 bg-transparent border-none focus:outline-none w-full"
+            />
+            <input
+              value={profile.subtitle}
+              onChange={(e) => updateProfile({ ...profile, subtitle: e.target.value })}
+              placeholder="한 줄 문구를 입력하세요"
+              className="text-sm text-gray-500 italic mt-1 bg-transparent border-none focus:outline-none w-full"
+            />
           </div>
 
           {/* 달력 + 버튼 */}

@@ -7,8 +7,10 @@ export function useSupabaseSync({ userCode, data, setData, selectedDate, setSele
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSyncError, setLastSyncError] = useState(null);
+  const [profile, setProfile] = useState({ title: '', subtitle: '' });
   const prevDataRef = useRef(null);
   const debounceTimerRef = useRef(null);
+  const profileTimerRef = useRef(null);
   const isInitialLoadRef = useRef(true);
 
   // Supabase에서 전체 데이터 로드
@@ -18,6 +20,17 @@ export function useSupabaseSync({ userCode, data, setData, selectedDate, setSele
     const loadData = async () => {
       setIsLoading(true);
       try {
+        // 프로필 로드
+        const { data: profileData } = await supabase
+          .from('user_codes')
+          .select('title, subtitle')
+          .eq('code', userCode)
+          .single();
+
+        if (profileData) {
+          setProfile({ title: profileData.title || '', subtitle: profileData.subtitle || '' });
+        }
+
         const { data: rows, error } = await supabase
           .from('timebox_days')
           .select('date, day_data')
@@ -146,5 +159,22 @@ export function useSupabaseSync({ userCode, data, setData, selectedDate, setSele
     };
   }, [data, selectedDate, userCode, saveToSupabase]);
 
-  return { isLoading, isSaving, lastSyncError };
+  // 프로필 업데이트 (디바운스)
+  const updateProfile = useCallback((newProfile) => {
+    setProfile(newProfile);
+    if (profileTimerRef.current) clearTimeout(profileTimerRef.current);
+    profileTimerRef.current = setTimeout(async () => {
+      if (!userCode) return;
+      try {
+        await supabase
+          .from('user_codes')
+          .update({ title: newProfile.title, subtitle: newProfile.subtitle })
+          .eq('code', userCode);
+      } catch (err) {
+        console.error('Profile save failed:', err);
+      }
+    }, 1500);
+  }, [userCode]);
+
+  return { isLoading, isSaving, lastSyncError, profile, updateProfile };
 }
