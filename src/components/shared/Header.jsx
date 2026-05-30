@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Cloud, CloudOff, Loader, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
 import { iconButton } from '../../ui/styles';
 
 function formatDate(dateStr) {
@@ -27,15 +27,6 @@ export default function Header({
 
   const statusAndSignOut = (
     <div className="flex items-center gap-1 flex-shrink-0">
-      <div className="flex items-center" title={lastSyncError || ''}>
-        {isSaving ? (
-          <Loader className="w-4 h-4 text-blue-500 animate-spin" />
-        ) : lastSyncError ? (
-          <CloudOff className="w-4 h-4 text-red-500" />
-        ) : (
-          <Cloud className="w-4 h-4 text-green-500" />
-        )}
-      </div>
       <button onClick={onSignOut} className={`p-1.5 ${iconButton}`} title="나가기">
         <LogOut className="w-4 h-4" />
       </button>
@@ -49,19 +40,19 @@ export default function Header({
   }
 
   return (
-    <div className="mb-4 sm:mb-6 bg-white rounded-lg shadow-sm p-3 sm:p-4">
+    <div className="mb-4 sm:mb-6 bg-[var(--tb-surface)] border border-[var(--tb-border)] rounded-[var(--tb-radius)] shadow-[var(--tb-shadow)] p-3 sm:p-4">
       <div className="mb-2">
         <input
           value={profile.title}
           onChange={(e) => updateProfile({ ...profile, title: e.target.value })}
           placeholder="나의 Timebox"
-          className="text-lg sm:text-2xl font-bold text-gray-800 bg-transparent border-none focus:outline-none w-full"
+          className="tb-heading text-lg sm:text-2xl text-[var(--tb-text)] bg-transparent border-none focus:outline-none w-full placeholder:text-[var(--tb-faint)]"
         />
         <input
           value={profile.subtitle}
           onChange={(e) => updateProfile({ ...profile, subtitle: e.target.value })}
           placeholder="한 줄 문구를 입력하세요"
-          className="text-xs sm:text-sm text-gray-500 italic mt-1 bg-transparent border-none focus:outline-none w-full"
+          className="text-xs sm:text-sm text-[var(--tb-muted)] italic mt-1 bg-transparent border-none focus:outline-none w-full placeholder:text-[var(--tb-faint)]"
         />
       </div>
 
@@ -75,7 +66,7 @@ export default function Header({
           </button>
           <button
             onClick={() => dateInputRef.current?.showPicker()}
-            className="text-sm sm:text-base text-gray-700 font-medium hover:text-blue-600 transition-colors truncate"
+            className="text-sm sm:text-base text-[var(--tb-text)] font-medium hover:text-[var(--tb-accent)] transition-colors truncate"
           >
             {formatDate(selectedDate)}
           </button>

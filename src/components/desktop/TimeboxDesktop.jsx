@@ -37,7 +37,7 @@ export default function TimeboxDesktop({ timebox, onSignOut }) {
   } = timebox;
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen font-sans">
+    <div className="w-full max-w-6xl mx-auto p-6 bg-[var(--tb-bg)] min-h-screen font-sans">
       <Header
         profile={profile}
         updateProfile={updateProfile}
@@ -75,8 +75,8 @@ export default function TimeboxDesktop({ timebox, onSignOut }) {
         </div>
 
         <div className="col-span-7">
-          <div className="bg-white rounded-lg shadow-sm p-6 overflow-y-auto">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 border-b border-gray-200 pb-2">
+          <div className="bg-[var(--tb-surface)] border border-[var(--tb-border)] rounded-[var(--tb-radius)] shadow-[var(--tb-shadow)] p-6 overflow-y-auto">
+            <h2 className="tb-heading text-xl text-[var(--tb-text)] mb-6 border-b border-[var(--tb-border)] pb-2">
               Time Blocks
             </h2>
 

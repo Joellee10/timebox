@@ -66,7 +66,7 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
   } = timebox;
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 font-sans flex flex-col pb-20">
+    <div className="w-full min-h-screen bg-[var(--tb-bg)] font-sans flex flex-col pb-20">
       <div className="p-3">
         {activeTab === 'home' && (
           <Header
@@ -82,7 +82,7 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
         )}
 
         {activeTab === 'home' && (
-          <div className="bg-white rounded-lg shadow-sm p-3">
+          <div className="bg-[var(--tb-surface)] border border-[var(--tb-border)] rounded-[var(--tb-radius)] shadow-[var(--tb-shadow)] p-3">
             <div className="space-y-4">
               <TimeBlockSection
                 title="오전"
@@ -129,7 +129,7 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
 
         {activeTab === 'tasks' && (
           <div className="space-y-4">
-            <h1 className="text-lg font-bold text-gray-800 px-1">Tasks</h1>
+            <h1 className="tb-heading text-lg text-[var(--tb-text)] px-1">Tasks</h1>
             <BrainDump
               items={currentData.brainDump}
               priorities={currentData.priorities}
@@ -157,18 +157,18 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
 
         {activeTab === 'menu' && menuView === 'root' && (
           <div className="space-y-4">
-            <h1 className="text-lg font-bold text-gray-800 px-1">My Box</h1>
+            <h1 className="tb-heading text-lg text-[var(--tb-text)] px-1">My Box</h1>
             <div className={card}>
-              <ul className="divide-y divide-gray-100">
+              <ul className="divide-y divide-[var(--tb-border)]">
               {MENU_ITEMS.map(({ key, label, icon: Icon }) => (
                 <li key={key}>
                   <button
                     onClick={() => setMenuView(key)}
-                    className="w-full flex items-center gap-3 py-3 text-left hover:bg-gray-50 rounded-lg px-1 transition-colors"
+                    className="w-full flex items-center gap-3 py-3 text-left hover:bg-[var(--tb-inset)] rounded-[var(--tb-radius)] px-1 transition-colors"
                   >
-                    <Icon className="w-4 h-4 text-gray-500" />
-                    <span className="flex-1 text-sm text-gray-800">{label}</span>
-                    <ChevronRight className="w-4 h-4 text-gray-300" />
+                    <Icon className="w-4 h-4 text-[var(--tb-muted)]" />
+                    <span className="flex-1 text-sm text-[var(--tb-text)]">{label}</span>
+                    <ChevronRight className="w-4 h-4 text-[var(--tb-faint)]" />
                   </button>
                 </li>
               ))}
@@ -206,7 +206,7 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
         )}
       </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around pt-2 pb-safe z-10">
+      <nav className="fixed bottom-0 left-0 right-0 bg-[var(--tb-surface)] border-t border-[var(--tb-border)] flex justify-around pt-2 pb-safe z-10">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.key;
@@ -215,7 +215,7 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
               key={tab.key}
               onClick={() => goToTab(tab.key)}
               className={`flex-1 flex flex-col items-center gap-1 py-2 px-1 transition-colors ${
-                isActive ? 'text-gray-900' : 'text-gray-400'
+                isActive ? 'text-[var(--tb-accent)]' : 'text-[var(--tb-faint)]'
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-2' : ''}`} />

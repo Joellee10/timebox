@@ -16,7 +16,7 @@ export default function TimeBlockSection({
   onRemove,
 }) {
   return (
-    <div className="border-l-2 sm:border-l-4 border-gray-300 pl-3 sm:pl-4">
+    <div className="border-l-2 sm:border-l-4 border-[var(--tb-accent)] pl-3 sm:pl-4">
       <div className="flex items-baseline gap-2 mb-2 sm:mb-3">
         <h3 className={subHeading}>
           {title} <span className={headingMuted}>{timeRange}</span>
@@ -28,7 +28,7 @@ export default function TimeBlockSection({
           (draggedItem.type === 'priority' ||
             (draggedItem.type === 'timeblock' && draggedItem.timeBlock !== blockKey)) &&
           items.length < 3
-            ? 'border-gray-400 bg-gray-50'
+            ? 'border-[var(--tb-accent)] bg-[var(--tb-inset)]'
             : ''
         }`}
         onDragOver={onDragOver}
@@ -56,11 +56,11 @@ export default function TimeBlockSection({
               type="checkbox"
               checked={item.done || false}
               onChange={() => onToggleDone(blockKey, index)}
-              className="w-4 h-4 sm:w-5 sm:h-5 bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-gray-400 transition-colors accent-gray-600"
+              className="w-4 h-4 sm:w-5 sm:h-5 rounded border-2 border-[var(--tb-border)] focus:ring-2 focus:ring-[var(--tb-accent)] transition-colors accent-[var(--tb-accent)]"
             />
             <span
               className={`flex-1 text-sm font-semibold ${
-                item.done || false ? 'line-through text-gray-400' : 'text-gray-800'
+                item.done || false ? 'line-through text-[var(--tb-faint)]' : 'text-[var(--tb-text)]'
               }`}
             >
               {item.text || item}
@@ -71,7 +71,7 @@ export default function TimeBlockSection({
           </div>
         ))}
         {items.length === 0 && (
-          <div className="text-center text-xs sm:text-sm text-gray-300 py-2 sm:py-8">비어있음</div>
+          <div className="text-center text-xs sm:text-sm text-[var(--tb-faint)] py-2 sm:py-8">비어있음</div>
         )}
       </div>
     </div>

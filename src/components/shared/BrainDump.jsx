@@ -51,7 +51,7 @@ export default function BrainDump({
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={onAdd}
-            className={`flex-1 flex items-center gap-2 p-2 sm:p-3 text-sm text-gray-400 hover:text-gray-600 ${dashedBox}`}
+            className={`flex-1 flex items-center gap-2 p-2 sm:p-3 text-sm text-[var(--tb-faint)] hover:text-[var(--tb-text)] ${dashedBox}`}
           >
             <Plus className="w-4 h-4" />
             <span>추가</span>
@@ -65,8 +65,8 @@ export default function BrainDump({
         </div>
       </div>
       {showKeyboardHints && (
-        <div className="mt-3 pt-3 border-t border-gray-100">
-          <p className="text-xs text-gray-400">Cmd+P: 우선순위로 이동 / Enter: 다음 줄</p>
+        <div className="mt-3 pt-3 border-t border-[var(--tb-border)]">
+          <p className="text-xs text-[var(--tb-faint)]">Cmd+P: 우선순위로 이동 / Enter: 다음 줄</p>
         </div>
       )}
     </div>

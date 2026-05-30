@@ -1,34 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import TimeboxTool from './TimeboxTool';
-import CodeEntryScreen from './components/CodeEntryScreen';
-import AdminPanel from './components/AdminPanel';
+import LoginScreen from './components/LoginScreen';
+import LoadingScreen from './components/shared/LoadingScreen';
+import ThemeSwitcher from './components/shared/ThemeSwitcher';
+import { useAuth } from './hooks/useAuth';
+import { applyTheme, getStoredTheme } from './ui/themes';
 
 export default function App() {
-  const isAdmin = new URLSearchParams(window.location.search).has('admin');
+  const { loading, isAuthed, devMode, userId, signInWithGoogle, signOut, enterDevMode } = useAuth();
 
-  const [userCode, setUserCode] = useState(() => {
-    return localStorage.getItem('timebox-user-code') || null;
-  });
+  // 저장된 디자인 테마 복원
+  useEffect(() => {
+    applyTheme(getStoredTheme());
+  }, []);
 
-  const handleSignOut = () => {
-    localStorage.removeItem('timebox-user-code');
-    localStorage.removeItem('timebox-v1');
-    setUserCode(null);
-  };
-
-  if (isAdmin) {
-    return <AdminPanel />;
-  }
-
-  if (!userCode) {
-    return <CodeEntryScreen onSubmit={(code) => setUserCode(code)} />;
-  }
+  const ready = isAuthed || devMode;
 
   return (
-    <div className="min-h-screen flex justify-center items-start bg-gray-100">
-      <div className="w-full max-w-6xl">
-        <TimeboxTool userCode={userCode} onSignOut={handleSignOut} />
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <LoadingScreen />
+      ) : !ready ? (
+        <LoginScreen onGoogle={signInWithGoogle} onDev={enterDevMode} />
+      ) : (
+        <div className="min-h-screen flex justify-center items-start bg-[var(--tb-bg)]">
+          <div className="w-full max-w-6xl">
+            <TimeboxTool userId={userId} onSignOut={signOut} />
+          </div>
+        </div>
+      )}
+      <ThemeSwitcher />
+    </>
   );
 }

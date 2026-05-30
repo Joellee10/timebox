@@ -58,13 +58,13 @@ export default function Priorities({
               }`}
             >
               <div className="flex items-center gap-2 sm:gap-3">
-                <span className="w-6 h-6 sm:w-7 sm:h-7 bg-gray-700 text-white rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm flex-shrink-0">
+                <span className="w-6 h-6 sm:w-7 sm:h-7 bg-[var(--tb-accent)] text-[var(--tb-accent-contrast)] rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm flex-shrink-0">
                   {index + 1}
                 </span>
                 <input
                   value={text}
                   onChange={(e) => onUpdate(index, e.target.value)}
-                  className="flex-1 p-1 border-none bg-transparent focus:outline-none text-sm"
+                  className="flex-1 p-1 border-none bg-transparent focus:outline-none text-sm text-[var(--tb-text)] placeholder:text-[var(--tb-faint)]"
                   placeholder={`Priority ${index + 1}...`}
                 />
                 <button onClick={() => onRemove(index)} className={iconButton}>

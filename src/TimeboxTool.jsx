@@ -5,9 +5,9 @@ import TimeboxMobile from './components/mobile/TimeboxMobile';
 import TimeboxDesktop from './components/desktop/TimeboxDesktop';
 import LoadingScreen from './components/shared/LoadingScreen';
 
-export default function TimeboxTool({ userCode, onSignOut }) {
+export default function TimeboxTool({ userId, onSignOut }) {
   const isMobile = useIsMobile();
-  const timebox = useTimebox({ userCode });
+  const timebox = useTimebox({ userId });
 
   if (timebox.isLoading) {
     return <LoadingScreen />;

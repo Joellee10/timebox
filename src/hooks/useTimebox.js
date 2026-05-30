@@ -15,14 +15,14 @@ const getPriorityText = (p) => (typeof p === 'string' ? p : p?.text ?? '');
 const getPriorityPlacedIn = (p) => (typeof p === 'string' ? null : p?.placedIn ?? null);
 const getItemText = (item) => (typeof item === 'string' ? item : item?.text ?? '');
 
-export function useTimebox({ userCode }) {
+export function useTimebox({ userId }) {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [data, setData] = useState({});
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [draggedItem, setDraggedItem] = useState(null);
 
   const { isLoading, isSaving, lastSyncError, profile, updateProfile } = useSupabaseSync({
-    userCode,
+    userId,
     data,
     setData,
     selectedDate,
