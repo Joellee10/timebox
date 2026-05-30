@@ -4,6 +4,7 @@ import {
   ListTodo,
   Archive,
   Clock,
+  Bell,
   MessageSquare,
   ChevronLeft,
   ChevronRight,
@@ -13,6 +14,7 @@ import BrainDump from '../shared/BrainDump';
 import Priorities from '../shared/Priorities';
 import TimeBlockSection from '../shared/TimeBlockSection';
 import HistorySection from '../shared/HistorySection';
+import ReminderSettings from '../shared/ReminderSettings';
 import { card, sectionHeading, iconButton, mutedText } from '../../ui/styles';
 
 const TABS = [
@@ -23,6 +25,7 @@ const TABS = [
 
 const MENU_ITEMS = [
   { key: 'history', label: 'History', icon: Clock },
+  { key: 'reminder', label: '알림', icon: Bell },
   { key: 'feedback', label: '고객 의견', icon: MessageSquare },
 ];
 
@@ -195,6 +198,8 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
                 showHeading={false}
               />
             )}
+
+            {menuView === 'reminder' && <ReminderSettings />}
 
             {menuView === 'feedback' && (
               <div className={card}>
