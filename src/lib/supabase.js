@@ -43,9 +43,10 @@ export async function signInWithGoogle() {
 
   if (Capacitor.isNativePlatform()) {
     await ensureSocialInit();
+    // scopes를 넘기면 MainActivity 수정이 필요(플러그인 제약). 기본 로그인이 idToken을 반환하므로 옵션 없이 호출.
     const res = await SocialLogin.login({
       provider: 'google',
-      options: { scopes: ['email', 'profile'] },
+      options: {},
     });
     const idToken = res?.result?.idToken;
     if (!idToken) throw new Error('구글 로그인에서 idToken을 받지 못했어요.');
