@@ -16,6 +16,7 @@ import TimeBlockSection from '../shared/TimeBlockSection';
 import HistorySection from '../shared/HistorySection';
 import ReminderSettings from '../shared/ReminderSettings';
 import { card, sectionHeading, iconButton, mutedText } from '../../ui/styles';
+import { haptic } from '../../lib/native';
 
 const TABS = [
   { key: 'home', label: 'Home', icon: Home },
@@ -34,6 +35,7 @@ export default function TimeboxMobile({ timebox, onSignOut }) {
   const [menuView, setMenuView] = useState('root');
 
   const goToTab = (key) => {
+    haptic('light');
     setActiveTab(key);
     if (key !== 'menu') setMenuView('root');
   };

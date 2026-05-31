@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Palette, Check, X } from 'lucide-react';
 import { THEMES, applyTheme, getStoredTheme } from '../../ui/themes';
+import { syncStatusBar } from '../../lib/native';
 
 // 디자인 비교/선택용 떠 있는 선택기. (확정 후 제거 예정)
 // 모바일 하단 탭 네비를 가리지 않도록 bottom-24에 띄운다.
@@ -11,6 +12,7 @@ export default function ThemeSwitcher() {
   const pick = (key) => {
     applyTheme(key);
     setCurrent(key);
+    syncStatusBar(); // 네이티브 상태바 색을 새 테마에 맞춤
   };
 
   return (

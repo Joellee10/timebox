@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSupabaseSync } from './useSupabaseSync';
+import { haptic } from '../lib/native';
 
 const EMPTY_DAY = {
   priorities: [],
@@ -291,6 +292,7 @@ export function useTimebox({ userId }) {
   };
 
   const toggleTaskDone = (timeBlock, index) => {
+    haptic('light');
     const currentData = getCurrentData();
     const newTimeBlocks = { ...currentData.timeBlocks };
     const item = newTimeBlocks[timeBlock][index];

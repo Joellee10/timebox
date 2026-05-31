@@ -6,13 +6,15 @@ import ThemeSwitcher from './components/shared/ThemeSwitcher';
 import { useAuth } from './hooks/useAuth';
 import { applyTheme, getStoredTheme } from './ui/themes';
 import { initReminders } from './lib/notifications';
+import { initNativeChrome } from './lib/native';
 
 export default function App() {
   const { loading, isAuthed, devMode, userId, signInWithGoogle, signOut, enterDevMode } = useAuth();
 
-  // 저장된 디자인 테마 복원 + 알림 재예약(네이티브 한정)
+  // 저장된 디자인 테마 복원 + 네이티브 크롬(상태바/스플래시) + 알림 재예약
   useEffect(() => {
     applyTheme(getStoredTheme());
+    initNativeChrome();
     initReminders();
   }, []);
 

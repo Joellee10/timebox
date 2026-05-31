@@ -1,5 +1,17 @@
 {
   "appId": "com.joel.timebox",
   "appName": "Timebox",
-  "webDir": "dist"
+  "webDir": "dist",
+  "backgroundColor": "#f3f4f6",
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "backgroundColor": "#f3f4f6",
+      "showSpinner": false,
+      "androidScaleType": "CENTER_CROP"
+    },
+    "Keyboard": {
+      "resize": "native"
+    }
+  }
 }

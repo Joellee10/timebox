@@ -148,3 +148,19 @@ body,
 [class*="border-[var"] {
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
+
+/* 앱 같은 느낌 — 웹 브라우저 특유의 동작 제거 (네이티브 WebView/모바일) */
+html, body {
+  overscroll-behavior: none;          /* 당겨서 새로고침/바운스 방지 */
+  -webkit-tap-highlight-color: transparent; /* 탭 시 회색 깜빡임 제거 */
+}
+body {
+  -webkit-user-select: none;          /* 길게 눌러 텍스트 선택 방지 */
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* 입력 요소는 선택/편집 가능해야 함 */
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+}
