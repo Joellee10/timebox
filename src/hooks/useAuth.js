@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase, signInWithGoogle as googleSignIn, signOutUser, DEV_CODE } from '../lib/supabase';
+import { Capacitor } from '@capacitor/core';
+import { App as CapApp } from '@capacitor/app';
+import { supabase, signInWithGoogle as googleSignIn, signOutUser, completeNativeOAuth, DEV_CODE } from '../lib/supabase';
 
 const DEV_FLAG = 'timebox-dev';
 
@@ -32,7 +34,18 @@ export function useAuth() {
       setSession(newSession ?? null);
     });
 
-    return () => sub.subscription.unsubscribe();
+    // 네이티브: OAuth 딥링크 복귀 처리 (브라우저 → com.joel.timebox://login-callback#access_token=...)
+    let urlListener;
+    if (Capacitor.isNativePlatform()) {
+      CapApp.addListener('appUrlOpen', ({ url }) => {
+        completeNativeOAuth(url).catch((e) => console.error('OAuth 복귀 실패:', e?.message || e));
+      }).then((l) => { urlListener = l; });
+    }
+
+    return () => {
+      sub.subscription.unsubscribe();
+      if (urlListener) urlListener.remove();
+    };
   }, []);
 
   const enterDevMode = useCallback(() => {
